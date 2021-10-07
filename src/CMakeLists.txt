@@ -4,6 +4,7 @@ add_executable(configurator
     "Configured.cpp"
     "Config.cpp"
     "Derived.cpp"
+    "CommandoLion.cpp"
     )
 
 target_link_libraries(configurator LINK_PUBLIC ${Boost_LIBRARIES})

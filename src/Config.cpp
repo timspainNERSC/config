@@ -13,7 +13,7 @@
 
 namespace Nextsim {
 
-std::set<std::string> Config::filenames;
+std::vector<std::string> Config::filenames;
 std::set<Config*> Config::configuringObjects;
 
 Config::Config()
@@ -23,7 +23,7 @@ Config::Config()
 
 void Config::addFile(const std::string& filename)
 {
-    filenames.insert(filename);
+    filenames.push_back(filename);
 }
 
 boost::program_options::variables_map Config::parseStatic(const boost::program_options::options_description& opt)

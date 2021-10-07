@@ -9,6 +9,7 @@
 #define SRC_INCLUDE_CONFIG_HPP
 
 #include <string>
+#include <vector>
 #include <set>
 #include <functional>
 
@@ -37,7 +38,7 @@ protected:
     virtual void parseVirtual() = 0;
 
 private:
-    static std::set<std::string> filenames;
+    static std::vector<std::string> filenames;
     static std::set<Config*> configuringObjects;
 };
 
