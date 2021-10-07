@@ -19,7 +19,7 @@ public:
     Config() = default;
     virtual ~Config() = default;
 
-    virtual inline void parseVirtual() = 0;
+    virtual void parseVirtual() = 0;
 
     static void addFile(const std::string&);
     template<typename C>

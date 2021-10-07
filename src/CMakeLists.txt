@@ -3,6 +3,7 @@ add_executable(configurator
     "main.cpp"
     "Configured.cpp"
     "Config.cpp"
+    "Derived.cpp"
     )
 
 target_link_libraries(configurator LINK_PUBLIC ${Boost_LIBRARIES})

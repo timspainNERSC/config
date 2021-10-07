@@ -22,7 +22,8 @@ boost::program_options::variables_map Config::parseStatic(const boost::program_o
     boost::program_options::variables_map vm;
 
     for (auto& filestream: files) {
-        boost::program_options::store( boost::program_options::parse_config_file(filestream, opt, false), vm);
+        filestream.seekg(0);
+        boost::program_options::store( boost::program_options::parse_config_file(filestream, opt, true), vm);
     }
     return vm;
 }
