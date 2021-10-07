@@ -14,18 +14,11 @@
 
 namespace Nextsim {
 
-const std::string valueKey = "configs.value";
-const std::string stringKey = "configs.string";
 
 Configured::Configured()
-    : opt("Options")
-    , configuredValue(0.)
+    : configuredValue(0.)
     , configuredString("")
 {
-    opt.add_options()
-            (valueKey.c_str(), boost::program_options::value<double>()->default_value(1.), "Specify a value")
-            (stringKey.c_str(), boost::program_options::value<std::string>()->default_value("default"), "Specify a string")
-            ;
 }
 
 Configured::~Configured()
@@ -35,6 +28,16 @@ Configured::~Configured()
 
 void Configured::configure()
 {
+    boost::program_options::options_description opt("Options");
+
+    const std::string valueKey = "configs.value";
+    const std::string stringKey = "configs.string";
+
+    opt.add_options()
+            (valueKey.c_str(), boost::program_options::value<double>()->default_value(1.), "Specify a value")
+            (stringKey.c_str(), boost::program_options::value<std::string>()->default_value("default"), "Specify a string")
+            ;
+
     boost::program_options::variables_map vm = Config::parseStatic(opt);
     configuredValue = vm[valueKey].as<double>();
     configuredString = vm[stringKey].as<std::string>();

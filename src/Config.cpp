@@ -13,11 +13,17 @@
 
 namespace Nextsim {
 
-std::vector<std::string> Config::filenames;
+std::set<std::string> Config::filenames;
+std::set<Config*> Config::configuringObjects;
+
+Config::Config()
+{
+    configuringObjects.insert(this);
+}
 
 void Config::addFile(const std::string& filename)
 {
-    filenames.push_back(filename);
+    filenames.insert(filename);
 }
 
 boost::program_options::variables_map Config::parseStatic(const boost::program_options::options_description& opt)
@@ -33,5 +39,18 @@ boost::program_options::variables_map Config::parseStatic(const boost::program_o
         }
     }
     return vm;
+}
+
+void Config::addConfigurable(Config* pcfg)
+{
+    configuringObjects.insert(pcfg);
+}
+
+void Config::configureAll()
+{
+    for(Config* pConfigurer: configuringObjects) {
+        pConfigurer->parseVirtual();
+    }
+    configuringObjects.clear();
 }
 } /* namespace Nextsim */

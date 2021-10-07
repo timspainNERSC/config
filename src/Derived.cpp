@@ -14,7 +14,8 @@
 namespace Nextsim {
 
 Derived::Derived()
-    : configuredInt(0)
+    : Config()
+    , configuredInt(0)
     , configuredString("Yo!")
 {}
 
@@ -25,7 +26,7 @@ Derived::~Derived()
 
 void Derived::parseVirtual()
 {
-    boost::program_options::options_description opt;
+    boost::program_options::options_description opt("Options");
 
     const std::string valueKey = "derived.int";
     const std::string stringKey = "configs.string";
@@ -41,8 +42,8 @@ void Derived::parseVirtual()
     configuredString = std::string("Yo!") + vm[stringKey].as<std::string>();
 }
 
-void Derived::print()
+std::ostream& Derived::print(std::ostream& os)
 {
-    std::cout << "integer = " << configuredInt << ", string = " << configuredString << std::endl;
+    return os << "integer = " << configuredInt << ", string = " << configuredString;
 }
 } /* namespace Nextsim */

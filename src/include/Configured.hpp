@@ -23,8 +23,6 @@ public:
 
     std::ostream& print(std::ostream&);
 private:
-    boost::program_options::options_description opt;
-
     double configuredValue;
     std::string configuredString;
 };

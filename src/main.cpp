@@ -17,11 +17,12 @@ int main() {
 
     std::cout << "Configured" << std::endl;
     cfgd.configure();
-    cfgd.print(std::cout);
-    std::cout << std::endl;
+    cfgd.print(std::cout) << std::endl;
 
     std::cout << "Derived" << std::endl;
     Nextsim::Derived drv;
-    drv.parseVirtual();
-    drv.print();
+
+    Nextsim::Config::configureAll();
+
+    drv.print(std::cout) << std::endl;
 }

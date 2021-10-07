@@ -8,18 +8,18 @@
 #ifndef SRC_INCLUDE_CONFIG_HPP
 #define SRC_INCLUDE_CONFIG_HPP
 
-#include <vector>
 #include <string>
+#include <set>
+#include <functional>
+
 #include <boost/program_options.hpp>
 
 namespace Nextsim {
 
 class Config {
 public:
-    Config() = default;
+    Config();
     virtual ~Config() = default;
-
-    virtual void parseVirtual() = 0;
 
     static void addFile(const std::string&);
     template<typename C>
@@ -31,8 +31,14 @@ public:
     }
     static boost::program_options::variables_map parseStatic(const boost::program_options::options_description& opt);
 
+    static void addConfigurable(Config*);
+    static void configureAll();
+protected:
+    virtual void parseVirtual() = 0;
+
 private:
-    static std::vector<std::string> filenames;
+    static std::set<std::string> filenames;
+    static std::set<Config*> configuringObjects;
 };
 
 } /* namespace Nextsim */
