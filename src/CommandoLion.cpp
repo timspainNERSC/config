@@ -7,6 +7,7 @@
 
 #include <string>
 #include <iostream>
+#include <cstdlib>
 
 #include "include/CommandoLion.hpp"
 #include "/opt/home/include/boost/program_options.hpp"
@@ -26,12 +27,19 @@ CommandoLion::CommandoLion(int argc, char* argv[])
             ;
 //    auto parsed = boost::program_options::parse_command_line(argc, argv, opt);
     auto parsed = boost::program_options::command_line_parser(argc, argv)
-                          .options(opt)
-                          .style(boost::program_options::command_line_style::unix_style)// | po::command_line_style::allow_long_disguise)
-                          .allow_unregistered()
-                          .run();
+                                  .options(opt)
+                                  .style(boost::program_options::command_line_style::unix_style)// | po::command_line_style::allow_long_disguise)
+                                  .allow_unregistered()
+                                  .run();
     boost::program_options::store(parsed, m_arguments);
 
+    // Print help and exit
+    if (m_arguments.count("help")) {
+        std::cerr << opt << std::endl;
+        std::exit(EXIT_SUCCESS);
+    }
+
+    // Store the config file names in order. The variables_map does not.
     for (auto& lionOption: parsed.options) {
         if (lionOption.string_key == oneConfigFile || lionOption.string_key == manyConfigFiles) {
             for (auto& stringValue: lionOption.value) {

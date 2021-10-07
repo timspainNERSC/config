@@ -35,17 +35,10 @@ boost::program_options::variables_map Config::parseStatic(const boost::program_o
     // Parse the command file for any overrides
     if (m_argc) {
         auto parsed = boost::program_options::command_line_parser(m_argc, m_argv)
-                                  .options(opt)
-                                  .style(boost::program_options::command_line_style::unix_style)// | po::command_line_style::allow_long_disguise)
-                                  .allow_unregistered()
-                                  .run();
-
-        bool first = true;
-        for (auto& optio: parsed.options) {
-            std::cout << (first ? "" : ",") << optio.string_key;
-            first = false;
-        }
-        std::cout << std::endl;
+                                          .options(opt)
+                                          .style(boost::program_options::command_line_style::unix_style)// | po::command_line_style::allow_long_disguise)
+                                          .allow_unregistered()
+                                          .run();
         boost::program_options::store(parsed, vm);
     }
     // Parse the named files for configuration
