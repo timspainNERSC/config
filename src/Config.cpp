@@ -6,24 +6,31 @@
  */
 
 #include "include/Config.hpp"
+
+#include <fstream>
+#include <iostream>
 #include <boost/program_options.hpp>
 
 namespace Nextsim {
 
-std::vector<std::ifstream> Config::files;
+std::vector<std::string> Config::filenames;
 
 void Config::addFile(const std::string& filename)
 {
-    files.push_back(std::ifstream(filename));
+    filenames.push_back(filename);
 }
 
 boost::program_options::variables_map Config::parseStatic(const boost::program_options::options_description& opt)
 {
     boost::program_options::variables_map vm;
 
-    for (auto& filestream: files) {
-        filestream.seekg(0);
+    for (auto& filename: filenames) {
+        try {
+        std::ifstream filestream(filename);
         boost::program_options::store( boost::program_options::parse_config_file(filestream, opt, true), vm);
+        } catch (std::exception& e) {
+            std::cerr << e.what() << std::endl;
+        }
     }
     return vm;
 }

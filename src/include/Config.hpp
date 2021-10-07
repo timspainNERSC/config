@@ -8,8 +8,8 @@
 #ifndef SRC_INCLUDE_CONFIG_HPP
 #define SRC_INCLUDE_CONFIG_HPP
 
-#include <fstream>
 #include <vector>
+#include <string>
 #include <boost/program_options.hpp>
 
 namespace Nextsim {
@@ -32,7 +32,7 @@ public:
     static boost::program_options::variables_map parseStatic(const boost::program_options::options_description& opt);
 
 private:
-    static std::vector<std::ifstream> files;
+    static std::vector<std::string> filenames;
 };
 
 } /* namespace Nextsim */
