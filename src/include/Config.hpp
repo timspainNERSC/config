@@ -30,6 +30,11 @@ public:
             addFile(item);
         }
     }
+    inline static void setCommandLine(int argc, char* argv[])
+    {
+        m_argc = argc;
+        m_argv = argv;
+    }
     static boost::program_options::variables_map parseStatic(const boost::program_options::options_description& opt);
 
     static void addConfigurable(Config*);
@@ -40,6 +45,9 @@ protected:
 private:
     static std::vector<std::string> filenames;
     static std::set<Config*> configuringObjects;
+
+    static int m_argc;
+    static char** m_argv;
 };
 
 } /* namespace Nextsim */

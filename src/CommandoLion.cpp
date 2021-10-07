@@ -24,7 +24,12 @@ CommandoLion::CommandoLion(int argc, char* argv[])
             (oneConfigFile, boost::program_options::value<std::string>(), "specify a configuration file")
             (manyConfigFiles, boost::program_options::value<std::vector<std::string> >()->multitoken(), "specify a list of configuration files" )
             ;
-    auto parsed = boost::program_options::parse_command_line(argc, argv, opt);
+//    auto parsed = boost::program_options::parse_command_line(argc, argv, opt);
+    auto parsed = boost::program_options::command_line_parser(argc, argv)
+                          .options(opt)
+                          .style(boost::program_options::command_line_style::unix_style)// | po::command_line_style::allow_long_disguise)
+                          .allow_unregistered()
+                          .run();
     boost::program_options::store(parsed, m_arguments);
 
     for (auto& lionOption: parsed.options) {

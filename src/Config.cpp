@@ -16,6 +16,9 @@ namespace Nextsim {
 std::vector<std::string> Config::filenames;
 std::set<Config*> Config::configuringObjects;
 
+int Config::m_argc = 0;
+char** Config::m_argv = nullptr;
+
 Config::Config()
 {
     configuringObjects.insert(this);
@@ -29,7 +32,23 @@ void Config::addFile(const std::string& filename)
 boost::program_options::variables_map Config::parseStatic(const boost::program_options::options_description& opt)
 {
     boost::program_options::variables_map vm;
+    // Parse the command file for any overrides
+    if (m_argc) {
+        auto parsed = boost::program_options::command_line_parser(m_argc, m_argv)
+                                  .options(opt)
+                                  .style(boost::program_options::command_line_style::unix_style)// | po::command_line_style::allow_long_disguise)
+                                  .allow_unregistered()
+                                  .run();
 
+        bool first = true;
+        for (auto& optio: parsed.options) {
+            std::cout << (first ? "" : ",") << optio.string_key;
+            first = false;
+        }
+        std::cout << std::endl;
+        boost::program_options::store(parsed, vm);
+    }
+    // Parse the named files for configuration
     for (auto& filename: filenames) {
         try {
         std::ifstream filestream(filename);
@@ -38,6 +57,7 @@ boost::program_options::variables_map Config::parseStatic(const boost::program_o
             std::cerr << e.what() << std::endl;
         }
     }
+
     return vm;
 }
 

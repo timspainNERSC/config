@@ -17,6 +17,7 @@ int main(int argc, char* argv[]) {
     Nextsim::CommandoLion cl(argc, argv);
 
     Nextsim::Config::addFiles(cl.getConfigFileNames());
+    Nextsim::Config::setCommandLine(argc, argv);
 
     std::cout << "Configured" << std::endl;
     Nextsim::Configured cfgd;
