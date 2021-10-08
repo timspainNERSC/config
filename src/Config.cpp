@@ -33,7 +33,7 @@ boost::program_options::variables_map Config::parseStatic(const boost::program_o
 {
     boost::program_options::variables_map vm;
     // Parse the command file for any overrides
-    if (m_argc) {
+    if (m_argc && m_argv) {
         auto parsed = boost::program_options::command_line_parser(m_argc, m_argv)
                                           .options(opt)
                                           .style(boost::program_options::command_line_style::unix_style)// | po::command_line_style::allow_long_disguise)
