@@ -18,11 +18,10 @@ int main(int argc, char* argv[]) {
 
     Nextsim::CommandoLion cl(argc, argv);
 
-    std::vector<std::ifstream> files;
     for (std::string name: cl.getConfigFileNames()) {
-        files.push_back(std::ifstream(name));
+        //files.push_back(std::ifstream(name));
+        Nextsim::Config::addStream(std::unique_ptr<std::fstream>(new std::fstream(name)));
     }
-    Nextsim::Config::addStreams(files);
     Nextsim::Config::setCommandLine(argc, argv);
 
     std::cout << "Configured" << std::endl;

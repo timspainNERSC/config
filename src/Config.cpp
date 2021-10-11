@@ -13,7 +13,7 @@
 
 namespace Nextsim {
 
-std::vector<std::istream*> Config::sources;
+std::vector<std::unique_ptr<std::istream>> Config::sources;
 std::set<Config*> Config::configuringObjects;
 
 int Config::m_argc = 0;
@@ -37,16 +37,16 @@ boost::program_options::variables_map Config::parseStatic(const boost::program_o
         boost::program_options::store(parsed, vm);
     }
     // Parse the named files for configuration
-    for (std::istream* stream: sources) {
+    for (auto iter = sources.begin(); iter != sources.end(); ++iter) {
         try {
-        boost::program_options::store( boost::program_options::parse_config_file(*stream, opt, true), vm);
+        boost::program_options::store( boost::program_options::parse_config_file(**iter, opt, true), vm);
         } catch (std::exception& e) {
             std::cerr << e.what() << std::endl;
         }
         // Once the stream has been parsed, clear all flags (especially EOF)
         // and seek back to the start.
-        stream->clear();
-        stream->seekg(0, std::ios_base::beg);
+        (*iter)->clear();
+        (*iter)->seekg(0, std::ios_base::beg);
     }
 
     return vm;

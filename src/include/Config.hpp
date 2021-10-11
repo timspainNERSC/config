@@ -25,9 +25,9 @@ public:
     Config();
     virtual ~Config() = default;
 
-    static inline void addStream(std::istream& is)
+    static inline void addStream(std::unique_ptr<std::istream> is)
     {
-        sources.push_back(&is);
+        sources.push_back(std::move(is));
     }
     template<typename C>
     static void addStreams(C& container)
@@ -49,7 +49,7 @@ protected:
     virtual void parseVirtual() = 0;
 
 private:
-    static std::vector<std::istream*> sources;
+    static std::vector<std::unique_ptr<std::istream>> sources;
     static std::set<Config*> configuringObjects;
 
     static int m_argc;
