@@ -12,11 +12,17 @@
 #include "include/CommandoLion.hpp"
 
 #include <iostream>
+#include <vector>
+
 int main(int argc, char* argv[]) {
 
     Nextsim::CommandoLion cl(argc, argv);
 
-    Nextsim::Config::addFiles(cl.getConfigFileNames());
+    std::vector<std::ifstream> files;
+    for (std::string name: cl.getConfigFileNames()) {
+        files.push_back(std::ifstream(name));
+    }
+    Nextsim::Config::addStreams(files);
     Nextsim::Config::setCommandLine(argc, argv);
 
     std::cout << "Configured" << std::endl;

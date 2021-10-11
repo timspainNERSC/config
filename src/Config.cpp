@@ -13,7 +13,7 @@
 
 namespace Nextsim {
 
-std::vector<std::string> Config::filenames;
+std::vector<std::istream*> Config::sources;
 std::set<Config*> Config::configuringObjects;
 
 int Config::m_argc = 0;
@@ -22,11 +22,6 @@ char** Config::m_argv = nullptr;
 Config::Config()
 {
     configuringObjects.insert(this);
-}
-
-void Config::addFile(const std::string& filename)
-{
-    filenames.push_back(filename);
 }
 
 boost::program_options::variables_map Config::parseStatic(const boost::program_options::options_description& opt)
@@ -42,13 +37,16 @@ boost::program_options::variables_map Config::parseStatic(const boost::program_o
         boost::program_options::store(parsed, vm);
     }
     // Parse the named files for configuration
-    for (auto& filename: filenames) {
+    for (std::istream* stream: sources) {
         try {
-        std::ifstream filestream(filename);
-        boost::program_options::store( boost::program_options::parse_config_file(filestream, opt, true), vm);
+        boost::program_options::store( boost::program_options::parse_config_file(*stream, opt, true), vm);
         } catch (std::exception& e) {
             std::cerr << e.what() << std::endl;
         }
+        // Once the stream has been parsed, clear all flags (especially EOF)
+        // and seek back to the start.
+        stream->clear();
+        stream->seekg(0, std::ios_base::beg);
     }
 
     return vm;

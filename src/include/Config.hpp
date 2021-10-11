@@ -12,6 +12,9 @@
 #include <vector>
 #include <set>
 #include <functional>
+#include <istream>
+#include <fstream>
+#include <memory>
 
 #include <boost/program_options.hpp>
 
@@ -22,12 +25,15 @@ public:
     Config();
     virtual ~Config() = default;
 
-    static void addFile(const std::string&);
-    template<typename C>
-    static void addFiles(const C& container)
+    static inline void addStream(std::istream& is)
     {
-        for(const auto& item: container) {
-            addFile(item);
+        sources.push_back(&is);
+    }
+    template<typename C>
+    static void addStreams(C& container)
+    {
+        for (auto& stream: container) {
+            addStream(stream);
         }
     }
     inline static void setCommandLine(int argc, char* argv[])
@@ -43,7 +49,7 @@ protected:
     virtual void parseVirtual() = 0;
 
 private:
-    static std::vector<std::string> filenames;
+    static std::vector<std::istream*> sources;
     static std::set<Config*> configuringObjects;
 
     static int m_argc;
