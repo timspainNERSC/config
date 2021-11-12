@@ -14,25 +14,36 @@
 #include <iostream>
 #include <vector>
 
+class ConfClass : public Nextsim::Configured
+{
+public:
+    void configure() override
+    {
+        data = Configured::getConfiguration("conf.data", 1);
+    };
+private:
+    int data = 0;
+
+friend std::ostream& operator<<(std::ostream&, const ConfClass&);
+};
+
+std::ostream& operator<<(std::ostream& os, const ConfClass& cc)
+{
+    return os << cc.data;
+}
+
 int main(int argc, char* argv[]) {
 
     Nextsim::CommandoLion cl(argc, argv);
 
     for (std::string name: cl.getConfigFileNames()) {
         //files.push_back(std::ifstream(name));
-        Nextsim::Config::addStream(std::unique_ptr<std::fstream>(new std::fstream(name)));
+        Nextsim::Config::addStream(std::unique_ptr<std::istream>(new std::fstream(name)));
     }
     Nextsim::Config::setCommandLine(argc, argv);
 
     std::cout << "Configured" << std::endl;
-    Nextsim::Configured cfgd;
+    ConfClass cfgd;
     cfgd.configure();
-    cfgd.print(std::cout) << std::endl;
-
-    std::cout << "Derived" << std::endl;
-    Nextsim::Derived drv;
-
-    Nextsim::Config::configureAll();
-
-    drv.print(std::cout) << std::endl;
+    std::cout << cfgd << std::endl;
 }
