@@ -14,7 +14,7 @@
 #include <iostream>
 #include <vector>
 
-class ConfClass : public Nextsim::Configured
+class ConfClass : public Nextsim::Configured<ConfClass>
 {
 public:
     void configure() override
@@ -36,14 +36,19 @@ int main(int argc, char* argv[]) {
 
     Nextsim::CommandoLion cl(argc, argv);
 
+    std::cout << "Using file streams:" << std::endl;
     for (std::string name: cl.getConfigFileNames()) {
-        //files.push_back(std::ifstream(name));
-        Nextsim::Config::addStream(std::unique_ptr<std::istream>(new std::fstream(name)));
+        std::cout << name << std::endl;
+        Nextsim::Configurator::addFile(name);
     }
-    Nextsim::Config::setCommandLine(argc, argv);
+    Nextsim::Configurator::setCommandLine(argc, argv);
 
     std::cout << "Configured" << std::endl;
     ConfClass cfgd;
-    cfgd.configure();
+    Nextsim::tryConfigure(cfgd);//.configure();
     std::cout << cfgd << std::endl;
+
+    ConfClass cfge;
+    Nextsim::tryConfigure(&cfge);
+    std::cout << cfge << std::endl;
 }

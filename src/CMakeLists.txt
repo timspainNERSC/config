@@ -3,8 +3,8 @@ add_executable(configurator
     "main.cpp"
 #    "Configured.cpp" # Configured is currently header only
     "Configurator.cpp"
-    "Config.cpp"
-    "Derived.cpp"
+#    "Config.cpp"
+#    "Derived.cpp"
     "CommandoLion.cpp"
     )
 
