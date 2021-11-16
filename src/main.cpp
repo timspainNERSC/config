@@ -17,15 +17,26 @@
 class ConfClass : public Nextsim::Configured<ConfClass>
 {
 public:
-    void configure() override
-    {
-        data = Configured::getConfiguration("conf.data", 1);
+    enum {
+        DATA_KEY,
     };
+    void configure() override;
 private:
     int data = 0;
 
 friend std::ostream& operator<<(std::ostream&, const ConfClass&);
 };
+
+template<>
+const std::map<int, std::string> Nextsim::Configured<ConfClass>::keyMap = {
+        {ConfClass::DATA_KEY, "conf.data"},
+};
+
+void ConfClass::configure()
+{
+    data = Configured::getConfiguration(keyMap.at(DATA_KEY), 1);
+}
+
 
 std::ostream& operator<<(std::ostream& os, const ConfClass& cc)
 {

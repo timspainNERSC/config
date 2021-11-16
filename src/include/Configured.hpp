@@ -48,6 +48,8 @@ public:
         return retrieveValue<T>(name, opt);
     }
 
+    static const std::map<int, std::string> keyMap;
+
 protected:
     template <typename T> void addOption(const std::string& name, const T& defaultValue)
     {
